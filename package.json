@@ -5,5 +5,11 @@
   "repository": "https://github.com/NikolayFrantsev/babel-plugin-check-prop-types",
   "author": "Nikolay Frantsev <nikolay@frantsev.me>",
   "license": "MIT",
-  "type": "module"
+  "type": "module",
+  "devDependencies": {
+    "@stylistic/eslint-plugin": "4.2.0",
+    "eslint": "9.22.0",
+    "eslint-plugin-jest": "28.11.0",
+    "eslint-plugin-unicorn": "57.0.0"
+  }
 }
