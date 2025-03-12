@@ -1,0 +1,9 @@
+{
+  "name": "babel-plugin-check-prop-types",
+  "version": "1.0.0",
+  "description": "Babel plugin to typecheck React components with legacy PropTypes compatible with React 19",
+  "repository": "https://github.com/NikolayFrantsev/babel-plugin-check-prop-types",
+  "author": "Nikolay Frantsev <nikolay@frantsev.me>",
+  "license": "MIT",
+  "type": "module"
+}
