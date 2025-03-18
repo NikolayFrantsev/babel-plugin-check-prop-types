@@ -44,4 +44,13 @@ export default defineConfig([
       'unicorn/no-keyword-prefix': 'off',
     },
   },
+
+  {
+    files: ['**/*.cjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+      },
+    },
+  },
 ]);

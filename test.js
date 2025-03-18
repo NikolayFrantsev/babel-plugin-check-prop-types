@@ -64,7 +64,7 @@ const assert = async (input, output = input) => {
   const optionsTranspile = {
     plugins: [
       ...optionsParse.plugins,
-      ['./index.js', pluginOptions],
+      ['./index.cjs', pluginOptions],
     ],
   };
 

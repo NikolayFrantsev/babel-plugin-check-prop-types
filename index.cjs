@@ -1,4 +1,4 @@
-import Process from 'node:process';
+'use strict';
 
 // constants
 
@@ -13,7 +13,7 @@ const arrowPropertiesIdentifierName = '_props';
 
 // implementation
 
-export default ({ types }) => {
+module.exports = ({ types }) => {
   let fileName;
 
   let importIdentifierNode;
@@ -30,7 +30,9 @@ export default ({ types }) => {
 
   // logging
 
-  const warn = (option, message) => option && Process.stderr.write(`[${babelPrefix + pluginName}] Warning: ${message}\n`);
+  const logger = process.stderr.write;
+
+  const warn = (option, message) => option && logger(`[${babelPrefix + pluginName}] Warning: ${message}\n`);
 
   const warnOptions = options => warn(true, `Ignored plugin options: ${JSON.stringify(options)}`);
 

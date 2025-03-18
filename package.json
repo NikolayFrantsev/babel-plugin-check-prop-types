@@ -9,6 +9,7 @@
   "author": "Nikolay Frantsev <nikolay@frantsev.me>",
   "license": "MIT",
   "type": "module",
+  "main": "index.cjs",
   "scripts": {
     "prepare": "yarn eslint && yarn test",
     "test": "yarn jest --coverage --coverageThreshold='{\"global\":{\"statements\":100}}'",
