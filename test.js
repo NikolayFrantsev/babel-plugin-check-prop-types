@@ -207,9 +207,10 @@ describe('import', () => {
     function MyComponent() {}
     ${TEMPLATE_TYPES}
   `, `
+    ${TEMPLATE_IMPORT.replace(TEMPLATE_IMPORT_NAME, `${TEMPLATE_IMPORT_NAME}2`)}
     ${TEMPLATE_IMPORT}
     function MyComponent() {
-      ${TEMPLATE_CHECK_FUNCTION}
+      ${TEMPLATE_CHECK_FUNCTION.replace(TEMPLATE_IMPORT_NAME, `${TEMPLATE_IMPORT_NAME}2`)}
     }
     ${TEMPLATE_TYPES}
   `));

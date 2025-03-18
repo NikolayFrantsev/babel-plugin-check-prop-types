@@ -17,7 +17,6 @@ module.exports = ({ types }) => {
   let fileName;
 
   let importIdentifierNode;
-  let importExists = false;
   let importUsed = false;
 
   // options
@@ -47,18 +46,6 @@ module.exports = ({ types }) => {
 
   // getters
 
-  const getImportIdentifier = (path) => {
-    const importDeclaration = path.node.body.find(item => item.type === 'ImportDeclaration'
-      && item.source.value === importSourceName
-      && item.specifiers.some(specifier => specifier.type === 'ImportDefaultSpecifier'));
-
-    if (importDeclaration) importExists = true;
-
-    importIdentifierNode = importDeclaration
-      ? importDeclaration.specifiers[0].local
-      : path.scope.generateUidIdentifier(importIdentifierName);
-  };
-
   const getMethodArgumentIdentifier = (methodNode) => {
     const [firstArgument] = methodNode.params;
 
@@ -75,7 +62,7 @@ module.exports = ({ types }) => {
   // updaters
 
   const updateImports = (path) => {
-    if (importExists || !importUsed) return;
+    if (!importUsed) return;
 
     const importDeclaration = types.importDeclaration(
       [types.importDefaultSpecifier(importIdentifierNode)],
@@ -285,7 +272,7 @@ module.exports = ({ types }) => {
 
           parseOptions(opts);
 
-          getImportIdentifier(path);
+          importIdentifierNode = path.scope.generateUidIdentifier(importIdentifierName);
         },
 
         exit: updateImports,
