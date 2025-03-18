@@ -255,9 +255,10 @@ describe('import', () => {
     function MyComponent() {}
     ${TEMPLATE_TYPES}
   `, `
+    ${TEMPLATE_IMPORT.replace('_checkPropTypes', '_checkPropTypes2')}
     const ${TEMPLATE_IMPORT_NAME} = () => {};
     function MyComponent() {
-      ${TEMPLATE_CHECK_FUNCTION}
+      ${TEMPLATE_CHECK_FUNCTION.replace('_checkPropTypes', '_checkPropTypes2')}
     }
     ${TEMPLATE_TYPES}
   `));
