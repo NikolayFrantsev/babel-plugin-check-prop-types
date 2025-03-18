@@ -6,7 +6,7 @@ Works with [Function](https://react.dev/learn/your-first-component#defining-a-co
 
 Supports defining [extend](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends) class names with `classComponentExtends` (`Component` and `PureComponent` by default) and `classComponentExtendsObject` (`React` by default) array options.
 
-Supports debugging skipped components with `logIgnoredBinding` or `logIgnoredClassComponentExtends` boolean options (enabled by default).
+Supports debugging skipped components with `logIgnoredBinding` or `logIgnoredClass` boolean options (enabled by default).
 
 ## Examples
 
@@ -121,7 +121,7 @@ export default () => {
       // classComponentExtendsObject: ["UI"],
       // classComponentExtends: ["App"],
       // logIgnoredBinding: false,
-      // logIgnoredClassComponentExtends: false,
+      // logIgnoredClass: false,
     }]);
   }
 

@@ -1055,7 +1055,7 @@ describe('options', () => {
     });
   });
 
-  describe('logIgnoredClassComponentExtends', () => {
+  describe('logIgnoredClass', () => {
     it('positive', async () => {
       expectCallForConsoleWarn();
 
@@ -1068,7 +1068,7 @@ describe('options', () => {
     });
 
     it('negative', async () => {
-      pluginOptions.logIgnoredClassComponentExtends = false;
+      pluginOptions.logIgnoredClass = false;
 
       await assert(`
         class MyComponent extends UI.App {

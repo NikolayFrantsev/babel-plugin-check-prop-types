@@ -25,7 +25,7 @@ module.exports = ({ types }) => {
   const optionClassComponentExtends = [...reactClassComponentExtends];
 
   let optionLogIgnoredBinding = true;
-  let optionLogIgnoredClassComponentExtends = true;
+  let optionLogIgnoredClass = true;
 
   // logging
 
@@ -38,7 +38,7 @@ module.exports = ({ types }) => {
   const getSourceFile = () => fileName && fileName !== 'unknown' ? ` "${fileName}" file` : '';
   const getSource = ({ loc: { start: { line, column } } }) => `at${getSourceFile()} ${line} line ${column} column`;
 
-  const warnClass = ({ identifier }, superClassName) => warn(optionLogIgnoredClassComponentExtends,
+  const warnClass = ({ identifier }, superClassName) => warn(optionLogIgnoredClass,
     `Ignored propTypes ${getSource(identifier)} for class "${identifier.name}" with "${superClassName}" super class`);
 
   const warnBinding = (bindingType, { identifier }, type) => warn(optionLogIgnoredBinding,
@@ -238,7 +238,7 @@ module.exports = ({ types }) => {
     classComponentExtends,
 
     logIgnoredBinding,
-    logIgnoredClassComponentExtends,
+    logIgnoredClass,
 
     ...unknownOptions
   }) => {
@@ -253,7 +253,7 @@ module.exports = ({ types }) => {
     }
 
     if (logIgnoredBinding !== undefined) optionLogIgnoredBinding = Boolean(logIgnoredBinding);
-    if (logIgnoredClassComponentExtends !== undefined) optionLogIgnoredClassComponentExtends = Boolean(logIgnoredClassComponentExtends);
+    if (logIgnoredClass !== undefined) optionLogIgnoredClass = Boolean(logIgnoredClass);
 
     if (Object.keys(unknownOptions).length > 0) warnOptions(unknownOptions);
   };
