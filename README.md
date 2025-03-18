@@ -4,7 +4,7 @@
 
 Works with [Function](https://react.dev/learn/your-first-component#defining-a-component) (including Arrow Function) and [Class](https://react.dev/reference/react/Component) (including [@decorated](https://github.com/tc39/proposal-decorators)) components, [React](https://react.dev/learn/extracting-state-logic-into-a-reducer) or [Redux](https://redux.js.org/usage/structuring-reducers/basic-reducer-structure) reducers.
 
-Supports defining [extend](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends) class names with `classComponentExtends` (`Component` and `PureComponent` by default) and `classComponentExtendsObject` (`React` by default) array options.
+Supports defining [extend](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends) class name [regular expression](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions) pattern with `classNameMatcher` (unset by default).
 
 Supports debugging skipped components with `logIgnoredBinding` or `logIgnoredClass` boolean options (enabled by default).
 
@@ -118,8 +118,7 @@ export default () => {
 
   if (process.env.NODE_ENV !== "production") { // enable plugin only for non-production bundle
     plugins.push(["check-prop-types", {
-      // classComponentExtendsObject: ["UI"],
-      // classComponentExtends: ["App"],
+      // classNameMatcher: /^UI\.(.+)/,
       // logIgnoredBinding: false,
       // logIgnoredClass: false,
     }]);

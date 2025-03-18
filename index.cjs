@@ -5,7 +5,7 @@
 const babelPrefix = 'babel-plugin-';
 const pluginName = 'check-prop-types';
 
-const reactClassComponentExtends = ['Component', 'PureComponent'];
+const reactClassNameMatcher = /^(?:React\.)?(?:Pure)?Component$/u;
 
 const importIdentifierName = '_checkPropTypes';
 const importSourceName = 'prop-types/checkPropTypes';
@@ -21,9 +21,7 @@ module.exports = ({ types }) => {
 
   // options
 
-  const optionClassComponentExtendsObject = [];
-  const optionClassComponentExtends = [...reactClassComponentExtends];
-
+  let optionClassNameMatcher;
   let optionLogIgnoredBinding = true;
   let optionLogIgnoredClass = true;
 
@@ -57,6 +55,14 @@ module.exports = ({ types }) => {
     }
 
     return types.identifier(arrowPropertiesIdentifierName);
+  };
+
+  const getMemberExpressionName = (node) => {
+    if (node.type === 'MemberExpression') {
+      return `${getMemberExpressionName(node.object)}.${getMemberExpressionName(node.property)}`;
+    }
+
+    return node.name;
   };
 
   // updaters
@@ -134,21 +140,9 @@ module.exports = ({ types }) => {
 
     if (currentSuperClass.type === 'AssignmentExpression') currentSuperClass = currentSuperClass.right;
 
-    const { name, object, property } = currentSuperClass;
-    if (name) {
-      if (!optionClassComponentExtends.includes(name)) {
-        warnClass(binding, name);
-        return;
-      }
-    }
-
-    else if (object.name === 'React'
-      ? !reactClassComponentExtends.includes(property.name)
-      : (optionClassComponentExtendsObject.includes(object.name)
-          ? !optionClassComponentExtends.includes(property.name)
-          : true
-        )) {
-      warnClass(binding, `${property.name}.${object.name}`);
+    const fullName = getMemberExpressionName(currentSuperClass);
+    if (!reactClassNameMatcher.test(fullName) && (!optionClassNameMatcher || !optionClassNameMatcher.test(fullName))) {
+      warnClass(binding, fullName);
       return;
     }
 
@@ -234,22 +228,16 @@ module.exports = ({ types }) => {
   // options
 
   const parseOptions = ({
-    classComponentExtendsObject,
-    classComponentExtends,
+    classNameMatcher,
 
     logIgnoredBinding,
     logIgnoredClass,
 
     ...unknownOptions
   }) => {
-    if (classComponentExtendsObject !== undefined) {
-      if (Array.isArray(classComponentExtendsObject)) optionClassComponentExtendsObject.push(...classComponentExtendsObject);
-      else warnOptions({ classComponentExtendsObject });
-    }
-
-    if (classComponentExtends !== undefined) {
-      if (Array.isArray(classComponentExtends)) optionClassComponentExtends.push(...classComponentExtends);
-      else warnOptions({ classComponentExtends });
+    if (classNameMatcher !== undefined) {
+      if (classNameMatcher instanceof RegExp) optionClassNameMatcher = classNameMatcher;
+      else warnOptions({ classNameMatcher });
     }
 
     if (logIgnoredBinding !== undefined) optionLogIgnoredBinding = Boolean(logIgnoredBinding);

@@ -40,6 +40,7 @@ export default defineConfig([
 
   {
     rules: {
+      'unicorn/consistent-function-scoping': 'off',
       'unicorn/no-anonymous-default-export': 'off',
       'unicorn/no-keyword-prefix': 'off',
     },

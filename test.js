@@ -442,12 +442,30 @@ describe('binding', () => {
       ${TEMPLATE_TYPES}
     `));
 
-    it('extended', () => assert(`
+    it('component', () => assert(`
       class MyComponent extends Component {}
       ${TEMPLATE_TYPES}
     `));
 
     describe('render', () => {
+      it('basic', () => assert(`
+        class MyComponent {
+          ${TEMPLATE_CLASS_RENDER}
+        }
+        ${TEMPLATE_TYPES}
+      `));
+
+      it('object', async () => {
+        expectCallForConsoleWarn();
+
+        await assert(`
+          class MyComponent extends Object {
+            ${TEMPLATE_CLASS_RENDER}
+          }
+          ${TEMPLATE_TYPES}
+        `);
+      });
+
       it('component', () => assert(`
         class MyComponent extends Component {
           ${TEMPLATE_CLASS_RENDER}
@@ -511,63 +529,21 @@ describe('binding', () => {
         `);
       });
 
-      it('object', async () => {
-        expectCallForConsoleWarn();
+      it('triple', async () => {
+        pluginOptions.classNameMatcher = /^Lib\.UI\..+/u;
 
         await assert(`
-          class MyComponent extends Object {
-            ${TEMPLATE_CLASS_RENDER}
-          }
-          ${TEMPLATE_TYPES}
-        `);
-      });
-
-      it('app', async () => {
-        pluginOptions.classComponentExtends = ['App'];
-
-        await assert(`
-          class MyComponent extends App {
-            ${TEMPLATE_CLASS_RENDER}
-          }
-          ${TEMPLATE_TYPES}
-        `, `
-          ${TEMPLATE_IMPORT}
-          class MyComponent extends App {
-            ${TEMPLATE_CLASS_RENDER_CHECKED}
-          }
-          ${TEMPLATE_TYPES}
-        `);
-      });
-
-      it('ui app', async () => {
-        pluginOptions.classComponentExtendsObject = ['UI'];
-        pluginOptions.classComponentExtends = ['App'];
-
-        await assert(`
-          class MyComponent extends UI.App {
-            ${TEMPLATE_CLASS_RENDER}
-          }
-          ${TEMPLATE_TYPES}
-        `, `
-          ${TEMPLATE_IMPORT}
-          class MyComponent extends UI.App {
-            ${TEMPLATE_CLASS_RENDER_CHECKED}
-          }
-          ${TEMPLATE_TYPES}
-        `);
-      });
-
-      it('ui page', async () => {
-        pluginOptions.classComponentExtendsObject = ['UI'];
-
-        expectCallForConsoleWarn();
-
-        await assert(`
-          class MyComponent extends UI.Page {
-            ${TEMPLATE_CLASS_RENDER}
-          }
-          ${TEMPLATE_TYPES}
-        `);
+        class MyComponent extends Lib.UI.App {
+          ${TEMPLATE_CLASS_RENDER}
+        }
+        ${TEMPLATE_TYPES}
+      `, `
+        ${TEMPLATE_IMPORT}
+        class MyComponent extends Lib.UI.App {
+          ${TEMPLATE_CLASS_RENDER_CHECKED}
+        }
+        ${TEMPLATE_TYPES}
+      `);
       });
 
       it('import', () => assert(`
@@ -619,7 +595,9 @@ describe('binding', () => {
             ${TEMPLATE_CLASS_RENDER}
           }
           ${TEMPLATE_TYPES}
-          class MyComponent2 extends MyComponent {}
+          class MyComponent2 extends MyComponent {
+            ${TEMPLATE_CLASS_RENDER}
+          }
           ${TEMPLATE_TYPES.replace('MyComponent', 'MyComponent2')}
         `, `
           ${TEMPLATE_IMPORT}
@@ -627,7 +605,9 @@ describe('binding', () => {
             ${TEMPLATE_CLASS_RENDER_CHECKED}
           }
           ${TEMPLATE_TYPES}
-          class MyComponent2 extends MyComponent {}
+          class MyComponent2 extends MyComponent {
+            ${TEMPLATE_CLASS_RENDER}
+          }
           ${TEMPLATE_TYPES.replace('MyComponent', 'MyComponent2')}
         `);
       });
@@ -706,23 +686,6 @@ describe('binding', () => {
             }
             ${TEMPLATE_TYPES}
           `));
-
-          it('app', async () => {
-            pluginOptions.classComponentExtends = ['App'];
-
-            await assert(`
-              class MyComponent extends (_App = App) {
-                ${TEMPLATE_CLASS_RENDER}
-              }
-              ${TEMPLATE_TYPES}
-            `, `
-              ${TEMPLATE_IMPORT}
-              class MyComponent extends (_App = App) {
-                ${TEMPLATE_CLASS_RENDER_CHECKED}
-              }
-              ${TEMPLATE_TYPES}
-            `);
-          });
         });
       });
     });
@@ -931,7 +894,7 @@ describe('props', () => {
 });
 
 describe('options', () => {
-  describe('classComponentExtends', () => {
+  describe('classNameMatcher', () => {
     it('unset', async () => {
       expectCallForConsoleWarn();
 
@@ -944,7 +907,7 @@ describe('options', () => {
     });
 
     it('match', async () => {
-      pluginOptions.classComponentExtends = ['App'];
+      pluginOptions.classNameMatcher = /^App$/u;
 
       await assert(`
         class MyComponent extends App {
@@ -961,7 +924,7 @@ describe('options', () => {
     });
 
     it('mismatch', async () => {
-      pluginOptions.classComponentExtends = ['App2'];
+      pluginOptions.classNameMatcher = /^App2$/u;
 
       expectCallForConsoleWarn();
 
@@ -972,66 +935,18 @@ describe('options', () => {
         ${TEMPLATE_TYPES}
       `);
     });
-  });
 
-  describe('classComponentExtendsObject', () => {
-    it('unset', async () => {
-      expectCallForConsoleWarn();
+    it('invalid', async () => {
+      pluginOptions.classNameMatcher = 'App';
+
+      expectCallForConsoleWarn(2);
 
       await assert(`
-        class MyComponent extends UI.App {
+        class MyComponent extends App {
           ${TEMPLATE_CLASS_RENDER}
         }
         ${TEMPLATE_TYPES}
       `);
-    });
-
-    it('match', async () => {
-      pluginOptions.classComponentExtendsObject = ['UI'];
-      pluginOptions.classComponentExtends = ['App'];
-
-      await assert(`
-        class MyComponent extends UI.App {
-          ${TEMPLATE_CLASS_RENDER}
-        }
-        ${TEMPLATE_TYPES}
-      `, `
-        ${TEMPLATE_IMPORT}
-        class MyComponent extends UI.App {
-          ${TEMPLATE_CLASS_RENDER_CHECKED}
-        }
-        ${TEMPLATE_TYPES}
-      `);
-    });
-
-    describe('mismatch', () => {
-      it('object', async () => {
-        pluginOptions.classComponentExtendsObject = ['UI2'];
-        pluginOptions.classComponentExtends = ['App'];
-
-        expectCallForConsoleWarn();
-
-        await assert(`
-          class MyComponent extends UI.App {
-            ${TEMPLATE_CLASS_RENDER}
-          }
-          ${TEMPLATE_TYPES}
-        `);
-      });
-
-      it('property', async () => {
-        pluginOptions.classComponentExtendsObject = ['UI'];
-        pluginOptions.classComponentExtends = ['App2'];
-
-        expectCallForConsoleWarn();
-
-        await assert(`
-          class MyComponent extends UI.App {
-            ${TEMPLATE_CLASS_RENDER}
-          }
-          ${TEMPLATE_TYPES}
-        `);
-      });
     });
   });
 
@@ -1060,7 +975,7 @@ describe('options', () => {
       expectCallForConsoleWarn();
 
       await assert(`
-        class MyComponent extends UI.App {
+        class MyComponent extends App {
           ${TEMPLATE_CLASS_RENDER}
         }
         ${TEMPLATE_TYPES}
@@ -1071,7 +986,7 @@ describe('options', () => {
       pluginOptions.logIgnoredClass = false;
 
       await assert(`
-        class MyComponent extends UI.App {
+        class MyComponent extends App {
           ${TEMPLATE_CLASS_RENDER}
         }
         ${TEMPLATE_TYPES}
@@ -1079,19 +994,8 @@ describe('options', () => {
     });
   });
 
-  it('invalid', async () => {
-    pluginOptions.classComponentExtendsObject = 'UI';
-    pluginOptions.classComponentExtends = 'App';
-
-    expectCallForConsoleWarn(2);
-
-    await assert(`
-      const MyComponent = () => null;
-    `);
-  });
-
   it('unknown', async () => {
-    pluginOptions.unknown = true;
+    pluginOptions.unknown = /^unknown$/u;
 
     expectCallForConsoleWarn();
 
