@@ -14,31 +14,21 @@ Input:
 
 ```js
 import PropTypes from 'prop-types';
-import PropTypesExact from 'prop-types-exact';
-import { forbidExtraProps } from 'prop-types-tools';
 
 function FunctionComponent() {}
-FunctionComponent.propTypes = { // classical object without wrapper
-  myProp: PropTypes.number
-};
+FunctionComponent.propTypes = {};
 
 const ArrowFunctionComponent = () => {};
-ArrowFunctionComponent.propTypes = PropTypes.exact({ // you can use "exact" on root level from now
-  myProp: PropTypes.number
-});
+ArrowFunctionComponent.propTypes = {};
 
 class ClassComponent extends React.PureComponent {
-  render() {}
+  render() {} // render method is required to validate class components
 }
-ClassComponent.propTypes = PropTypesExact({ // just drop your "PropTypesExact" dependency
-  myProp: PropTypes.number
-});
+ClassComponent.propTypes = {};
 
-const anonymousFunction = function () {};
-anonymousFunction.displayName = "MyComponent";
-anonymousFunction.propTypes = forbidExtraProps({ // "forbidExtraProps" makes no sense anymore
-  myProp: PropTypes.number
-});
+const AnonymousFunction = function () {};
+AnonymousFunction.displayName = "MyComponent";
+AnonymousFunction.propTypes = {};
 ```
 
 Output:
@@ -47,39 +37,33 @@ Output:
 import _checkPropTypes from "prop-types/checkPropTypes";
 
 import PropTypes from 'prop-types';
-import PropTypesExact from 'prop-types-exact';
-import { forbidExtraProps } from 'prop-types-tools';
 
 function FunctionComponent() {
-  _checkPropTypes(FunctionComponent.propTypes, arguments[0], "prop", FunctionComponent.displayName || "FunctionComponent");
+  _checkPropTypes(FunctionComponent.propTypes, arguments[0], "prop",
+    FunctionComponent.displayName || "FunctionComponent");
 }
-FunctionComponent.propTypes = {
-  myProp: PropTypes.number
-};
+FunctionComponent.propTypes = {};
 
 const ArrowFunctionComponent = _props => {
-  _checkPropTypes(ArrowFunctionComponent.propTypes, _props, "prop", ArrowFunctionComponent.displayName || "ArrowFunctionComponent");
+  _checkPropTypes(ArrowFunctionComponent.propTypes, _props, "prop",
+    ArrowFunctionComponent.displayName || "ArrowFunctionComponent");
 };
-ArrowFunctionComponent.propTypes = PropTypes.exact({
-  myProp: PropTypes.number
-});
+ArrowFunctionComponent.propTypes = {};
 
 class ClassComponent extends React.PureComponent {
   render() {
-    _checkPropTypes(this.constructor.propTypes, this.props, "prop", this.constructor.displayName || "ClassComponent");
+    _checkPropTypes(this.constructor.propTypes, this.props, "prop",
+      ClassComponent.displayName || "ClassComponent");
   }
 }
-ClassComponent.propTypes = PropTypesExact({
-  myProp: PropTypes.number
-});
+ClassComponent.propTypes = {};
 
-const anonymousFunction = function () {
-  _checkPropTypes(anonymousFunction.propTypes, arguments[0], "prop", anonymousFunction.displayName || "anonymousFunction");
+const AnonymousFunction = function () {
+  _checkPropTypes(AnonymousFunction.propTypes, arguments[0], "prop",
+    AnonymousFunction.displayName || "AnonymousFunction");
 };
-anonymousFunction.displayName = "MyComponent";
-anonymousFunction.propTypes = forbidExtraProps({
-  myProp: PropTypes.number
-});
+AnonymousFunction.displayName = "MyComponent";
+AnonymousFunction.propTypes = {};
 ```
 
 In addition you can typecheck reducers (actually first argument of everything what looks like function):
@@ -88,14 +72,10 @@ In addition you can typecheck reducers (actually first argument of everything wh
 import { useReducer } from "react";
 import { createStore } from "redux";
 
-function counter(state = 0, action) {
-  if (action.type === "INCREMENT") {
-    return state + 1;
-  } else if (action.type === "DECREMENT") {
-    return state - 1;
-  } else {
-    return state;
-  }
+function counter(state, action) {
+  if (action.type === "INCREMENT") return state + 1;
+  if (action.type === "DECREMENT") return state - 1;
+  return state;
 }
 counter.propTypes = PropTypes.number.isRequired;
 
@@ -110,7 +90,7 @@ See [tests](https://github.com/NikolayFrantsev/babel-plugin-check-prop-types/blo
 
 ## Dependencies
 
-Update [`react-is`](https://www.npmjs.com/package/react-is) for [`prop-types`](https://www.npmjs.com/package/prop-types) with [Yarn resolutions](https://classic.yarnpkg.com/lang/en/docs/selective-version-resolutions/) (otherwise you’ll get validation errors for `ReactNode` or `ReactElement`):
+Update [`react-is`](https://www.npmjs.com/package/react-is) for [`prop-types`](https://www.npmjs.com/package/prop-types) with [Yarn resolutions](https://classic.yarnpkg.com/lang/en/docs/selective-version-resolutions/) (otherwise you’ll get validation errors for `PropTypes.node` or `PropTypes.element`):
 ```json
 {
   "dependencies": {

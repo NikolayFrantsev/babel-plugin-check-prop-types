@@ -124,80 +124,48 @@ const TEMPLATE_TYPES_EXACT = `MyComponent.propTypes = PropTypesExact(${TEMPLATE_
 describe('samples', () => {
   it('readme', () => assert(`
     import PropTypes from 'prop-types';
-    import PropTypesExact from 'prop-types-exact';
-    import { forbidExtraProps } from 'prop-types-tools';
     function FunctionComponent() {}
-    // classical object without wrapper
-    FunctionComponent.propTypes = {
-      myProp: PropTypes.number
-    };
+    FunctionComponent.propTypes = {};
     const ArrowFunctionComponent = () => {};
-    // you can use "exact" on root level from now
-    ArrowFunctionComponent.propTypes = PropTypes.exact({
-      myProp: PropTypes.number
-    });
+    ArrowFunctionComponent.propTypes = {};
     class ClassComponent extends React.PureComponent {
       render() {}
     }
-    // just drop your "PropTypesExact" dependency
-    ClassComponent.propTypes = PropTypesExact({
-      myProp: PropTypes.number
-    });
-    const anonymousFunction = function () {};
-    anonymousFunction.displayName = "MyComponent";
-    // "forbidExtraProps" makes no sense anymore
-    anonymousFunction.propTypes = forbidExtraProps({
-      myProp: PropTypes.number
-    });
+    ClassComponent.propTypes = {};
+    const AnonymousFunction = function () {};
+    AnonymousFunction.displayName = "MyComponent";
+    AnonymousFunction.propTypes = {};
   `, `
     ${TEMPLATE_IMPORT}
     import PropTypes from 'prop-types';
-    import PropTypesExact from 'prop-types-exact';
-    import { forbidExtraProps } from 'prop-types-tools';
     function FunctionComponent() {
       ${TEMPLATE_CHECK_FUNCTION.replaceAll('MyComponent', 'FunctionComponent')}
     }
-    // classical object without wrapper
-    FunctionComponent.propTypes = {
-      myProp: PropTypes.number
-    };
+    FunctionComponent.propTypes = {};
     const ArrowFunctionComponent = ${TEMPLATE_CHECK_ARROW_ARGUMENT} => {
       ${TEMPLATE_CHECK_ARROW.replaceAll('MyComponent', 'ArrowFunctionComponent')}
     };
-    // you can use "exact" on root level from now
-    ArrowFunctionComponent.propTypes = PropTypes.exact({
-      myProp: PropTypes.number
-    });
+    ArrowFunctionComponent.propTypes = {};
     class ClassComponent extends React.PureComponent {
       render() {
         ${TEMPLATE_CHECK_CLASS.replaceAll('MyComponent', 'ClassComponent')}
       }
     }
-    // just drop your "PropTypesExact" dependency
-    ClassComponent.propTypes = PropTypesExact({
-      myProp: PropTypes.number
-    });
-    const anonymousFunction = function () {
-      ${TEMPLATE_CHECK_FUNCTION.replaceAll('MyComponent', 'anonymousFunction')}
+    ClassComponent.propTypes = {};
+    const AnonymousFunction = function () {
+      ${TEMPLATE_CHECK_FUNCTION.replaceAll('MyComponent', 'AnonymousFunction')}
     };
-    anonymousFunction.displayName = "MyComponent";
-    // "forbidExtraProps" makes no sense anymore
-    anonymousFunction.propTypes = forbidExtraProps({
-      myProp: PropTypes.number
-    });
+    AnonymousFunction.displayName = "MyComponent";
+    AnonymousFunction.propTypes = {};
   `));
 
   it('reducer', () => assert(`
     import { useReducer } from "react";
     import { createStore } from "redux";
-    function counter(state = 0, action) {
-      if (action.type === "INCREMENT") {
-        return state + 1;
-      } else if (action.type === "DECREMENT") {
-        return state - 1;
-      } else {
-        return state;
-      }
+    function counter(state, action) {
+      if (action.type === "INCREMENT") return state + 1;
+      if (action.type === "DECREMENT") return state - 1;
+      return state;
     }
     counter.propTypes = PropTypes.number.isRequired;
     const ReactComponent = () => {
@@ -208,15 +176,11 @@ describe('samples', () => {
     ${TEMPLATE_IMPORT}
     import { useReducer } from "react";
     import { createStore } from "redux";
-    function counter(state = 0, action) {
+    function counter(state, action) {
       ${TEMPLATE_CHECK_FUNCTION.replaceAll('MyComponent', 'counter')}
-      if (action.type === "INCREMENT") {
-        return state + 1;
-      } else if (action.type === "DECREMENT") {
-        return state - 1;
-      } else {
-        return state;
-      }
+      if (action.type === "INCREMENT") return state + 1;
+      if (action.type === "DECREMENT") return state - 1;
+      return state;
     }
     counter.propTypes = PropTypes.number.isRequired;
     const ReactComponent = () => {
