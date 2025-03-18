@@ -27,9 +27,9 @@ module.exports = ({ types }) => {
 
   // logging
 
-  const logger = process.stderr.write;
+  const logger = message => process.stderr.write(`${message}\n`);
 
-  const warn = (option, message) => option && logger(`[${babelPrefix + pluginName}] Warning: ${message}\n`);
+  const warn = (option, message) => option && logger(`[${babelPrefix + pluginName}] Warning: ${message}`);
 
   const warnOptions = options => warn(true, `Ignored plugin options: ${JSON.stringify(options)}`);
 
