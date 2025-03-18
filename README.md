@@ -108,6 +108,20 @@ const reduxStore = createStore(counter, 0);
 
 See [tests](https://github.com/NikolayFrantsev/babel-plugin-check-prop-types/blob/master/test.js) for more examples.
 
+## Dependencies
+
+Update [`react-is`](https://www.npmjs.com/package/react-is) for [`prop-types`](https://www.npmjs.com/package/prop-types) with [Yarn resolutions](https://classic.yarnpkg.com/lang/en/docs/selective-version-resolutions/) (otherwise you’ll get validation errors for `ReactNode` or `ReactElement`):
+```json
+{
+  "dependencies": {
+    "prop-types": "^15.8.1"
+  },
+  "resolutions": {
+    "prop-types/react-is": "^19.0.0"
+  }
+}
+```
+
 ## Usage
 
 Install plugin package:
@@ -122,7 +136,7 @@ Update [Babel configuration](https://babeljs.io/docs/configuration#javascript-co
 export default () => {
   const plugins = [];
 
-  if (process.env.NODE_ENV === "development") { // enable plugin only for development bundle
+  if (process.env.NODE_ENV !== "production") { // enable plugin only for non-production bundle
     plugins.push(["check-prop-types", {
       // classComponentExtendsObject: ["UI"],
       // classComponentExtends: ["App"],
@@ -133,13 +147,4 @@ export default () => {
 
   return { plugins };
 };
-```
-
-Update `react-is` for `prop-types` with [Yarn resolutions](https://classic.yarnpkg.com/lang/en/docs/selective-version-resolutions/) (otherwise you’ll get validation errors for `PropTypes.node`):
-```json
-{
-  "resolutions": {
-    "prop-types/react-is": "19"
-  }
-}
 ```
