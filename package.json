@@ -2,12 +2,18 @@
   "name": "babel-plugin-check-prop-types",
   "version": "1.0.0",
   "description": "Babel plugin to typecheck React components with legacy PropTypes compatible with React 19",
-  "repository": "https://github.com/NikolayFrantsev/babel-plugin-check-prop-types",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NikolayFrantsev/babel-plugin-check-prop-types.git"
+  },
   "author": "Nikolay Frantsev <nikolay@frantsev.me>",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "test": "NODE_OPTIONS='--no-warnings --experimental-vm-modules' jest --coverage"
+    "prepare": "yarn eslint && yarn test",
+    "test": "yarn jest --coverage --coverageThreshold='{\"global\":{\"statements\":100}}'",
+    "eslint": "eslint . --ignore-pattern=coverage/",
+    "jest": "NODE_OPTIONS='--no-warnings --experimental-vm-modules' jest"
   },
   "devDependencies": {
     "@babel/core": "7.26.10",
