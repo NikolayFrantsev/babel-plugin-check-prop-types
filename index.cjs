@@ -268,9 +268,7 @@ module.exports = ({ types }) => {
     if (logIgnoredBinding !== undefined) optionLogIgnoredBinding = Boolean(logIgnoredBinding);
     if (logIgnoredClassComponentExtends !== undefined) optionLogIgnoredClassComponentExtends = Boolean(logIgnoredClassComponentExtends);
 
-    if (Object.keys(unknownOptions).length > 0) {
-      warnOptions(unknownOptions);
-    }
+    if (Object.keys(unknownOptions).length > 0) warnOptions(unknownOptions);
   };
 
   // plugin api
@@ -285,8 +283,9 @@ module.exports = ({ types }) => {
         enter(path, { file, opts }) {
           fileName = file.opts.filename.slice(file.opts.cwd.length + 1);
 
-          getImportIdentifier(path);
           parseOptions(opts);
+
+          getImportIdentifier(path);
         },
 
         exit: updateImports,
