@@ -2,12 +2,10 @@ import Process from 'node:process';
 import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { transformAsync } from '@babel/core';
 
-/* eslint-disable unicorn/no-keyword-prefix */
-
 // mocks
 
-let pluginOptions; // eslint-disable-line init-declarations
-let expectedCallsForConsoleWarn; // eslint-disable-line init-declarations
+let pluginOptions;
+let expectedCallsForConsoleWarn;
 
 beforeEach(() => { // eslint-disable-line jest/no-hooks, jest/require-top-level-describe
   pluginOptions = {};

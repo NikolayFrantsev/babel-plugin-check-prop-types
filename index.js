@@ -1,5 +1,3 @@
-/* eslint-disable unicorn/no-keyword-prefix */
-
 import Process from 'node:process';
 
 // constants
@@ -14,9 +12,9 @@ const arrowPropertiesIdentifier = '_props';
 
 // implementation
 
-export default ({ types }) => { // eslint-disable-line unicorn/no-anonymous-default-export
-  let fileName; // eslint-disable-line init-declarations
-  let programBody; // eslint-disable-line init-declarations
+export default ({ types }) => {
+  let fileName;
+  let programBody;
 
   // options
 
@@ -286,8 +284,6 @@ export default ({ types }) => { // eslint-disable-line unicorn/no-anonymous-defa
           programBody = path.node.body;
 
           // options parsing
-
-          /* eslint-disable no-undefined */
 
           if (classComponentExtendsObject !== undefined) {
             if (Array.isArray(classComponentExtendsObject)) optionClassComponentExtendsObject.push(...classComponentExtendsObject);

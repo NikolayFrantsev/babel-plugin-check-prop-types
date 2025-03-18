@@ -18,16 +18,30 @@ export default defineConfig([
 
   {
     rules: {
-      'capitalized-comments': 'off',
       curly: ['error', 'multi-line'],
+      'one-var': ['error', 'never'],
+      quotes: ['error', 'single', { avoidEscape: true }],
+    },
+  },
+
+  {
+    rules: {
+      'capitalized-comments': 'off',
+      'init-declarations': 'off',
       'max-lines': 'off',
       'max-lines-per-function': 'off',
       'max-statements': 'off',
       'no-magic-numbers': 'off',
       'no-ternary': 'off',
-      'one-var': ['error', 'never'],
-      quotes: ['error', 'single', { avoidEscape: true }],
+      'no-undefined': 'off',
       'sort-imports': 'off',
+    },
+  },
+
+  {
+    rules: {
+      'unicorn/no-anonymous-default-export': 'off',
+      'unicorn/no-keyword-prefix': 'off',
     },
   },
 ]);
