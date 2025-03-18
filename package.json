@@ -13,7 +13,7 @@
   "scripts": {
     "prepare": "yarn eslint && yarn test",
     "test": "yarn jest --coverage --coverageThreshold='{\"global\":{\"statements\":100}}'",
-    "eslint": "eslint . --ignore-pattern=coverage/",
+    "eslint": "eslint --ignore-pattern=coverage/",
     "jest": "NODE_OPTIONS='--no-warnings --experimental-vm-modules' jest"
   },
   "devDependencies": {
